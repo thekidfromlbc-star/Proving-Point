@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Creative Profile — Cute Wizard</title>
+<style>
+  :root{
+    --bg:#0e0f15;
+    --ink:#f6f7fb;
+    --muted:#b8bbd3;
+    --line:#24263a;
+
+    /* Theme seeds */
+    --freelancer:#FF8FA1;
+    --creative:#B8FF6E;
+    --starter:#73F6FF;
+
+    --chip1:#2a2d46;
+    --chip2:#ff6b6b;
+    --chip3:#9b6bff;
+    --chip4:#6be7ff;
+    --chip5:#ffd166;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;background:
+      radial-gradient(800px 400px at 10% -10%, #181a2a 0, transparent 60%),
+      radial-gradient(900px 500px at 90% -15%, #141625 0, transparent 60%),
+      var(--bg);
+    color:var(--ink);
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    line-height:1.45;
+  }
+  .wrap{max-width:980px;margin:0 auto;padding:22px}
+  header{display:flex;align-items:center;gap:12px;margin:8px 0 18px}
+  .logo{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#6ee7ff,#c7f7ff);
+        display:grid;place-items:center;color:#032430;font-weight:900}
+  .title small{display:block;color:var(--muted)}
+  .card{background:#16192b;border:1px solid var(--line);border-radius:20px;overflow:hidden;
+        box-shadow:0 18px 50px rgba(0,0,0,.35)}
+  .hero{display:grid;grid-template-columns:1fr 1.25fr}
+  .hero img{width:100%;height:100%;object-fit:cover}
+  .pad{padding:18px}
+  h1{font-size:clamp(24px,4vw,36px);margin:4px 0 8px}
+  .muted{color:var(--muted)}
+  .controls{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+  button{appearance:none;border:0;border-radius:14px;padding:12px 16px;font-weight:800;cursor:pointer;
+         transition:transform .02s ease, box-shadow .18s ease, background .2s ease}
+  button:active{transform:translateY(1px)}
+  .btn-primary{background:#6ee7ff;color:#032430;box-shadow:0 10px 26px rgba(110,231,255,.25)}
+  .btn-ghost{background:transparent;color:var(--ink);border:1px solid #2a2d44}
+  .btn-prev{background:#1d2140;color:var(--ink);border:1px solid #2a2d44}
+  .progress{height:10px;background:#1a1e36;border-radius:999px;overflow:hidden;margin:12px 0 6px}
+  .bar{height:100%;width:0;background:linear-gradient(90deg,#6ee7ff,#c7f7ff)}
+  .step{padding:18px;border-top:1px solid var(--line)}
+  .step h2{margin:0 0 10px;font-size:20px}
+  fieldset{border:0;padding:0;margin:0}
+  .choices{display:grid;grid-template-columns:1fr;gap:10px}
+  .opt{display:flex;align-items:center;gap:12px;background:#191c35;border:1px solid #2b2e49;border-radius:14px;padding:12px}
+  .opt input{width:20px;height:20px}
+  .opt .lbl{font-weight:700}
+  .grid-2{grid-template-columns:1fr 1fr}
+  .grid-3{grid-template-columns:1fr 1fr 1fr}
+  .nav{display:flex;justify-content:space-between;gap:10px;margin-top:12px}
+
+  /* Result card */
+  .result{display:none;padding:18px}
+  .profile{
+    --theme:#6ee7ff;
+    background:#111320;
+    border:1px solid #262a46;
+    border-radius:24px;
+    padding:20px;
+    position:relative;
+    overflow:hidden;
+  }
+  .profile::before{
+    content:""; position:absolute; inset:-40% -30% auto auto;
+    width:70%; height:140%;
+    background:radial-gradient(closest-side, var(--theme), transparent 70%);
+    opacity:.10; transform:rotate(15deg);
+  }
+  .row{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .left{display:flex;align-items:center;gap:14px}
+  .avatar{
+    width:72px;height:72px;border-radius:22px;background:#0f1222;display:grid;place-items:center;
+    border:2px solid color-mix(in srgb, var(--theme) 45%, transparent);
+    box-shadow:0 12px 30px rgba(0,0,0,.35)
+  }
+  .avatar svg{width:36px;height:36px}
+  .name{font-weight:900;font-size:28px;letter-spacing:.4px}
+  .tagline{
+    margin:8px 0 14px;color:#dfe3ff;font-weight:800;text-transform:uppercase;text-align:center;
+    font-size:clamp(14px,2.6vw,18px);line-height:1.25;overflow-wrap:anywhere;text-wrap:balance;
+  }
+  .chips{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:10px}
+  .chips2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}
+  .chip{
+    background:#1c2040;border:1px solid #2b2e49;border-radius:18px;padding:14px 12px; text-align:center;
+    display:grid;gap:6px;place-items:center
+  }
+  .chip .title{font-weight:900; letter-spacing:.8px; color:#cfd3ff; font-size:12px}
+  .chip .badge{font-weight:900;font-size:18px;background:#0e1024; border:1px solid #2b2e49; padding:8px 12px; border-radius:12px}
+  .tiny{font-size:12px;color:#aeb3d1}
+  .share{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;justify-content:center}
+
+  /* Easy button badge */
+  .easy-wrap{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:8px}
+  .easy-img{width:140px;height:140px}
+  @media (max-width:880px){.hero{grid-template-columns:1fr}.chips{grid-template-columns:1fr 1fr} .name{font-size:24px}.easy-img{width:110px;height:110px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">✨</div>
+    <div class="title">
+      <small>Cute Multi‑Step Wizard</small>
+      <strong>Build Your Creative Profile Card</strong>
+    </div>
+  </header>
+
+  <div class="card" id="app" role="application" aria-labelledby="title">
+    <div class="hero">
+      <img src="https://images.unsplash.com/photo-1552632380-088d360edfe6?q=80&w=1600&auto=format&fit=crop" alt="Studio vibe">
+      <div class="pad">
+        <h1 id="title">Let’s make your profile.</h1>
+        <p class="muted">We’ll ask a few things and then render a clean profile card like your mockups.</p>
+        <div class="easy-wrap">
+          <!-- Red "easy" style button with THAT WASN'T SO HARD text (inline SVG, no external asset) -->
+          <img class="easy-img" alt="That Wasn't So Hard button" src="data:image/svg+xml;utf8,<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'>
+  <defs>
+    <radialGradient id='shine' cx='40%' cy='30%' r='70%'>
+      <stop offset='0%' stop-color='%23ffb3b3'/>
+      <stop offset='55%' stop-color='%23ff4545'/>
+      <stop offset='100%' stop-color='%23c81d25'/>
+    </radialGradient>
+    <linearGradient id='base' x1='0' y1='0' x2='0' y2='1'>
+      <stop offset='0%' stop-color='%23caced6'/>
+      <stop offset='100%' stop-color='%23848a99'/>
+    </linearGradient>
+  </defs>
+  <!-- Shadow -->
+  <ellipse cx='120' cy='180' rx='95' ry='20' fill='%23000000' opacity='.25'/>
+  <!-- Base ring -->
+  <ellipse cx='120' cy='160' rx='105' ry='36' fill='url(%23base)'/>
+  <!-- Red cap -->
+  <circle cx='120' cy='120' r='95' fill='url(%23shine)' stroke='%23a10e13' stroke-width='6'/>
+  <!-- Text -->
+  <g fill='white' font-family='Arial Black, Arial, sans-serif' text-anchor='middle'>
+    <text x='120' y='105' font-size='22'>THAT WASN&apos;T</text>
+    <text x='120' y='135' font-size='30'>SO HARD</text>
+  </g>
+</svg>">
+          <div class="controls">
+            <button class="btn-primary" id="start">Start</button>
+            <button class="btn-ghost" id="restart" style="display:none">Restart</button>
+          </div>
+        </div>
+        <div class="progress" aria-hidden="true"><div class="bar" id="bar"></div></div>
+      </div>
+    </div>
+
+    <div id="steps"></div>
+
+    <section class="result" id="result" aria-live="polite" aria-atomic="true">
+      <div class="profile" id="profile" style="--theme:#6ee7ff">
+        <div class="row">
+          <div class="left">
+            <div class="avatar" id="avatar" aria-hidden="true"></div>
+            <div class="name" id="name">NAME HERE</div>
+          </div>
+          <div class="tiny" id="subline">Summary generated from your answers</div>
+        </div>
+        <div class="tagline" id="tagline">I’M A FREELANCER, I RUN AND GUN, QUICK SHOOTS, QUICKER TURNAROUND.</div>
+
+        <div class="chips">
+          <div class="chip">
+            <div class="title">ROLES</div>
+            <div class="badge" id="roleBadge">Editor</div>
+          </div>
+          <div class="chip">
+            <div class="title">PROJECTS</div>
+            <div class="badge" id="projBadge">Podcasts</div>
+          </div>
+          <div class="chip">
+            <div class="title">RATE</div>
+            <div class="badge" id="rateBadge">&gt;$750</div>
+          </div>
+          <div class="chip">
+            <div class="title">BUDGETS</div>
+            <div class="badge" id="budgetBadge">$10,000+</div>
+          </div>
+          <div class="chip">
+            <div class="title">GEAR</div>
+            <div class="badge" id="gearBadge">Camera</div>
+          </div>
+        </div>
+
+        <div class="chips2">
+          <div class="chip">
+            <div class="title">CITY</div>
+            <div class="badge" id="cityBadge">—</div>
+          </div>
+          <div class="chip">
+            <div class="title">DIFFICULTY (SELF‑RATED)</div>
+            <div class="badge" id="diffBadge">—/10</div>
+          </div>
+        </div>
+
+        <div class="share">
+          <button class="btn-primary" id="copy">Copy Summary</button>
+          <button class="btn-ghost" id="print">Print / Save PDF</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <p class="tiny" style="text-align:center;margin:16px 0">Single HTML file • Runs locally • MIT License</p>
+</div>
+
+<script>
+// ===== Config (steps) =====
+const quiz = [
+  { id:"yourName", title:"Your name (for the card)", type:"text", required:true },
+  { id:"city", title:"What city are you based in?", type:"text", required:true },
+  {
+    id: "align",
+    title: "Which do you align with?",
+    type: "single",
+    required: true,
+    options: [
+      {value:"Freelancer (run & gun)", label:"Freelancer — run & gun, quick shoots, quicker turnaround"},
+      {value:"Creative (original works)", label:"Creative — original works, growing and expanding"},
+      {value:"Starting out (learning)", label:"Starting out — learning, networking & making money"}
+    ]
+  },
+  {
+    id: "roles",
+    title: "What do you do? (pick all that apply)",
+    type: "multi",
+    required: true,
+    options: [
+      {value:"Editor", label:"Editor"},
+      {value:"Videographer", label:"Videographer"},
+      {value:"Photographer", label:"Photographer"},
+      {value:"Sound", label:"Sound"},
+      {value:"Creative Director", label:"Creative Director"},
+      {value:"Producer", label:"Producer"},
+      {value:"Director", label:"Director"},
+      {value:"Director of Photography", label:"Director of Photography (DP)"}
+    ]
+  },
+  {
+    id: "gigs",
+    title: "Projects you want (pick all)",
+    type: "multi",
+    required: true,
+    options: [
+      {value:"Podcasts", label:"Podcasts"},
+      {value:"Music Videos", label:"Music Videos"},
+      {value:"Content", label:"Content / Social"},
+      {value:"Commercial", label:"Commercial"},
+      {value:"Narrative Short", label:"Narrative short"},
+      {value:"Narrative Feature", label:"Narrative feature"},
+      {value:"Events", label:"Events"},
+      {value:"Sports", label:"Sports"}
+    ]
+  },
+  {
+    id: "baseRate",
+    title: "Your base rate?",
+    type: "single",
+    required: true,
+    options: [
+      {value:">$250", label:">$250"},
+      {value:">$500", label:">$500"},
+      {value:">$750", label:">$750"},
+      {value:">$1,000", label:">$1,000"}
+    ]
+  },
+  {
+    id: "budget",
+    title: "Typical client budget?",
+    type: "single",
+    required: true,
+    // New bins as requested
+    options: [
+      {value:"$250", label:"$250"},
+      {value:"$500", label:"$500"},
+      {value:"$1,000", label:"$1,000"},
+      {value:"$5,000", label:"$5,000"},
+      {value:"$10,000+", label:"$10,000+"}
+    ]
+  },
+  {
+    id: "equipCats",
+    title: "What equipment do you own?",
+    type: "multi",
+    required: false,
+    options: [
+      {value:"Camera", label:"Camera"},
+      {value:"Lights", label:"Lights"},
+      {value:"Sound", label:"Sound"},
+      {value:"Computer", label:"Computer"}
+    ]
+  },
+  {
+    id: "ownCam",
+    title: "Do you own a camera?",
+    type: "single",
+    required: true,
+    options: [
+      {value:"I own my own camera", label:"Yes — I own my own camera"},
+      {value:"I do not own my own camera", label:"No — I rent or borrow"}
+    ]
+  },
+  {
+    id: "insured",
+    title: "Is your gear insured?",
+    type: "single",
+    required: true,
+    options: [
+      {value:"equipment insured", label:"Yes — insured"},
+      {value:"equipment not insured", label:"No — not insured"}
+    ]
+  },
+  {
+    id: "difficulty",
+    title: "How difficult was this? (1–10)",
+    type: "range",
+    required: true,
+    min:1, max:10, step:1
+  }
+];
+
+// ===== Engine =====
+const $ = (s,n=document)=>n.querySelector(s);
+const $$ = (s,n=document)=>Array.from(n.querySelectorAll(s));
+const stepsWrap = $("#steps");
+const bar = $("#bar");
+const startBtn = $("#start");
+const restartBtn = $("#restart");
+const resultEl = $("#result");
+
+let state = JSON.parse(sessionStorage.getItem("cute-state-v3")||"{}");
+let index = 0;
+
+function save(){ sessionStorage.setItem("cute-state-v3", JSON.stringify(state)); }
+function clear(){ sessionStorage.removeItem("cute-state-v3"); }
+
+function renderStep(step){
+  const sec = document.createElement("section");
+  sec.className = "step";
+  sec.hidden = true;
+  sec.dataset.step = step.id;
+
+  const h = document.createElement("h2");
+  h.textContent = step.title;
+  sec.appendChild(h);
+
+  const fs = document.createElement("fieldset");
+  const choices = document.createElement("div");
+  choices.className = "choices";
+  if(step.type !== "text" && step.type!=="range" && step.options){
+    if(step.options.length>=6) choices.classList.add("grid-2");
+    if(step.options.length>=12) choices.classList.add("grid-3");
+  }
+
+  if(step.type === "text"){
+    const wrap = document.createElement("label");
+    wrap.className = "opt";
+    const input = document.createElement("input");
+    input.type = "text";
+    input.placeholder = step.id==="city" ? "City (e.g., Long Beach, CA)" : "Type your name";
+    input.value = state[step.id] || "";
+    Object.assign(input.style, {width:"100%", background:"#0f1222", border:"1px solid #2b2e49", color:"var(--ink)", borderRadius:"12px", padding:"12px"});
+    input.addEventListener("input", ()=>{ state[step.id]=input.value.trim(); save(); updateNext(); });
+    wrap.appendChild(input);
+    choices.appendChild(wrap);
+  } else if(step.type === "range"){
+    const wrap = document.createElement("div"); wrap.className="opt";
+    const input = document.createElement("input");
+    input.type = "range";
+    input.min = step.min || 1; input.max = step.max || 10; input.step = step.step || 1;
+    input.value = state[step.id] || Math.round((input.min+input.max)/2);
+    input.style.width = "100%";
+    const val = document.createElement("strong"); val.textContent = input.value; val.style.marginLeft="8px";
+    input.addEventListener("input", ()=>{ val.textContent = input.value; });
+    input.addEventListener("change", ()=>{ state[step.id]=input.value; save(); updateNext(); });
+    wrap.appendChild(input); wrap.appendChild(val); choices.appendChild(wrap);
+  } else {
+    step.options.forEach((opt,i)=>{
+      const id = step.id+"-"+i;
+      const wrap = document.createElement("label");
+      wrap.className = "opt";
+      const input = document.createElement("input");
+      input.type = step.type==="single" ? "radio" : "checkbox";
+      input.name = step.id;
+      input.id = id;
+      input.value = opt.value;
+      input.checked = Array.isArray(state[step.id]) ? state[step.id].includes(opt.value) : state[step.id]===opt.value;
+      input.addEventListener("change", ()=>{
+        if(step.type==="single"){ state[step.id]=input.value; }
+        else{
+          const set = new Set(state[step.id]||[]);
+          if(input.checked) set.add(input.value); else set.delete(input.value);
+          state[step.id] = Array.from(set);
+        }
+        save(); updateNext();
+      });
+      const span = document.createElement("span");
+      span.className = "lbl"; span.textContent = opt.label;
+      wrap.appendChild(input); wrap.appendChild(span); choices.appendChild(wrap);
+    });
+  }
+
+  fs.appendChild(choices); sec.appendChild(fs);
+
+  const nav = document.createElement("div"); nav.className="nav";
+  const prev = document.createElement("button"); prev.className="btn-prev"; prev.textContent="Back";
+  prev.addEventListener("click", ()=>go(index-1));
+  const next = document.createElement("button"); next.className="btn-primary"; next.textContent="Next";
+  next.addEventListener("click", ()=>{ if(step.required && !hasAnswer(step)) return; go(index+1); });
+  nav.appendChild(prev); nav.appendChild(next);
+  sec.appendChild(nav);
+
+  stepsWrap.appendChild(sec);
+
+  function hasAnswer(step){
+    const v = state[step.id];
+    if(step.type==="text") return (v||"").length>0;
+    if(step.type==="range") return !!v;
+    if(step.type==="single") return !!v;
+    if(step.type==="multi") return Array.isArray(v)&&v.length>0;
+    return false;
+  }
+  function updateNext(){ next.disabled = step.required ? !hasAnswer(step) : false; }
+  updateNext();
+}
+
+function renderAll(){
+  stepsWrap.innerHTML = "";
+  quiz.forEach(renderStep);
+}
+
+function go(i){
+  const total = quiz.length;
+  i = Math.max(0, Math.min(i, total));
+  $$(".step", stepsWrap).forEach(n=>n.hidden=true);
+  if(i===total){ finish(); return; }
+  index = i;
+  const node = stepsWrap.querySelector(`[data-step="${quiz[i].id}"]`);
+  node.hidden = false;
+  node.scrollIntoView({behavior:"smooth", block:"nearest"});
+  bar.style.width = Math.round((i/total)*100)+"%";
+  resultEl.style.display = "none";
+  restartBtn.style.display = "inline-block";
+}
+
+function emojiForAlign(v){
+  if(!v) return smile();
+  if(v.startsWith("Freelancer")) return money();
+  if(v.startsWith("Creative")) return cameraRoll();
+  return smile();
+}
+function themeForAlign(v){
+  if(!v) return "#6ee7ff";
+  if(v.startsWith("Freelancer")) return getComputedStyle(document.documentElement).getPropertyValue("--freelancer") || "#FF8FA1";
+  if(v.startsWith("Creative")) return getComputedStyle(document.documentElement).getPropertyValue("--creative") || "#B8FF6E";
+  return getComputedStyle(document.documentElement).getPropertyValue("--starter") || "#73F6FF";
+}
+function taglineForAlign(v){
+  if(!v) return "";
+  if(v.startsWith("Freelancer")) return "I’M A FREELANCER. I RUN AND GUN, QUICK SHOOTS, QUICKER TURNAROUND.";
+  if(v.startsWith("Creative")) return "I’M A CREATIVE. I SHOOT ORIGINAL WORKS AND I’M LOOKING TO GROW AND EXPAND.";
+  return "I’M JUST STARTING OFF AND THIS IS HOW I WANT TO NETWORK AND MAKE MONEY. STILL LEARNING!";
+}
+
+function finish(){
+  // hydrate profile card
+  $("#name").textContent = state.yourName || "NAME HERE";
+  $("#tagline").textContent = taglineForAlign(state.align);
+  $("#subline").textContent = (state.city? state.city+" • " : "") + "Profile recap • " + new Date().toLocaleDateString();
+
+  // badges
+  const roles = Array.isArray(state.roles) ? state.roles : [];
+  const gigs = Array.isArray(state.gigs) ? state.gigs : [];
+  $("#roleBadge").textContent = roles.length ? roles.join(", ") : "—"; // show all roles
+  $("#projBadge").textContent = gigs.length ? gigs.join(", ") : "—";
+  $("#rateBadge").textContent = state.baseRate || "—";
+  $("#budgetBadge").textContent = state.budget || "—";
+  const gearList = Array.isArray(state.equipCats) && state.equipCats.length ? state.equipCats.join(", ") : "—";
+  $("#gearBadge").textContent = gearList;
+  $("#cityBadge").textContent = state.city || "—";
+  $("#diffBadge").textContent = (state.difficulty || "—") + "/10";
+
+  // theme + icon
+  const theme = themeForAlign(state.align);
+  $("#profile").style.setProperty("--theme", theme);
+  $("#avatar").innerHTML = emojiForAlign(state.align);
+
+  // show result
+  bar.style.width = "100%";
+  resultEl.style.display = "block";
+  resultEl.scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+function restart(){ state = {}; clear(); index = 0; renderAll(); go(0); }
+function start(){ startBtn.style.display="none"; restartBtn.style.display="inline-block"; renderAll(); go(0); }
+
+// Simple SVGs
+function smile(){ return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg>`; }
+function money(){ return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<path d="M12 3c2 1 3 2 3 4s-1 3-3 4-3 2-3 4 1 3 3 4"/><path d="M12 17v4"/><path d="M12 3v4"/></svg>`; }
+function cameraRoll(){ return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3"/><circle cx="9.5" cy="12" r="2.5"/></svg>`; }
+
+// Events
+startBtn.addEventListener("click", start);
+restartBtn.addEventListener("click", restart);
+document.getElementById("copy").addEventListener("click", ()=>{
+  const line = `${state.yourName || "—"} — ${taglineForAlign(state.align)} | City: ${state.city||"—"} | Roles: ${(state.roles||[]).join(", ")||"—"} | Projects: ${(state.gigs||[]).join(", ")||"—"} | Rate: ${state.baseRate||"—"} | Budget: ${state.budget||"—"} | Gear: ${(state.equipCats||[]).join(", ")||"—"} | ${state.ownCam||""} | ${state.insured||""} | Difficulty: ${state.difficulty||"—"}/10`;
+  navigator.clipboard.writeText(line).then(()=>{
+    const btn = document.getElementById("copy"); btn.textContent="Copied!"; setTimeout(()=>btn.textContent="Copy Summary",1500);
+  });
+});
+document.getElementById("print").addEventListener("click", ()=>window.print());
+
+// resume session
+if(Object.keys(state).length){ start(); }
+</script>
+</body>
+</html>
