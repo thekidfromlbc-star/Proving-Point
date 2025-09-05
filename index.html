@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Creative Profile — Cute Wizard</title>
 <style>
   :root{
@@ -45,6 +45,10 @@
   .pad{padding:18px}
   h1{font-size:clamp(24px,4vw,36px);margin:4px 0 8px}
   .muted{color:var(--muted)}
+  .notice{
+    background:#11172b;border:1px dashed #2b3254;color:#d6dcff;
+    padding:12px 14px;border-radius:14px;margin:12px 0 6px;font-weight:600
+  }
   .controls{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
   button{appearance:none;border:0;border-radius:14px;padding:12px 16px;font-weight:800;cursor:pointer;
          transition:transform .02s ease, box-shadow .18s ease, background .2s ease}
@@ -54,13 +58,13 @@
   .btn-prev{background:#1d2140;color:var(--ink);border:1px solid #2a2d44}
   .progress{height:10px;background:#1a1e36;border-radius:999px;overflow:hidden;margin:12px 0 6px}
   .bar{height:100%;width:0;background:linear-gradient(90deg,#6ee7ff,#c7f7ff)}
-  .step{padding:18px;border-top:1px solid var(--line)}
-  .step h2{margin:0 0 10px;font-size:20px}
+  .step{padding:18px;border-top:1px solid var(--line);padding-bottom:calc(env(safe-area-inset-bottom, 16px) + 16px)}
+  .step h2{margin:0 0 10px;font-size:clamp(18px,3.8vw,22px)}
   fieldset{border:0;padding:0;margin:0}
   .choices{display:grid;grid-template-columns:1fr;gap:10px}
   .opt{display:flex;align-items:center;gap:12px;background:#191c35;border:1px solid #2b2e49;border-radius:14px;padding:12px}
-  .opt input{width:20px;height:20px}
-  .opt .lbl{font-weight:700}
+  .opt input{width:20px;height:20px;flex:0 0 auto}
+  .opt .lbl{font-weight:700;line-height:1.3;word-break:break-word}
   .grid-2{grid-template-columns:1fr 1fr}
   .grid-3{grid-template-columns:1fr 1fr 1fr}
   .nav{display:flex;justify-content:space-between;gap:10px;margin-top:12px}
@@ -93,7 +97,7 @@
   .name{font-weight:900;font-size:28px;letter-spacing:.4px}
   .tagline{
     margin:8px 0 14px;color:#dfe3ff;font-weight:800;text-transform:uppercase;text-align:center;
-    font-size:clamp(14px,2.6vw,18px);line-height:1.25;overflow-wrap:anywhere;text-wrap:balance;
+    font-size:clamp(13px,2.4vw,18px);line-height:1.25;overflow-wrap:anywhere;text-wrap:balance;
   }
   .chips{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:10px}
   .chips2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}
@@ -102,14 +106,25 @@
     display:grid;gap:6px;place-items:center
   }
   .chip .title{font-weight:900; letter-spacing:.8px; color:#cfd3ff; font-size:12px}
-  .chip .badge{font-weight:900;font-size:18px;background:#0e1024; border:1px solid #2b2e49; padding:8px 12px; border-radius:12px}
+  .chip .badge{
+    font-weight:900;font-size:18px;background:#0e1024; border:1px solid #2b2e49; padding:8px 12px; border-radius:12px;
+    word-break:break-word; hyphens:auto;
+  }
   .tiny{font-size:12px;color:#aeb3d1}
   .share{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;justify-content:center}
 
-  /* Easy button badge */
-  .easy-wrap{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:8px}
-  .easy-img{width:140px;height:140px}
-  @media (max-width:880px){.hero{grid-template-columns:1fr}.chips{grid-template-columns:1fr 1fr} .name{font-size:24px}.easy-img{width:110px;height:110px}}
+  @media (max-width:880px){
+    .hero{grid-template-columns:1fr}
+    .chips{grid-template-columns:1fr 1fr}
+    .name{font-size:24px}
+  }
+  @media (max-width:560px){
+    .chips{grid-template-columns:1fr}
+    .chips2{grid-template-columns:1fr}
+    .chip .badge{font-size:16px;padding:10px}
+    .opt{padding:12px}
+    .grid-2,.grid-3{grid-template-columns:1fr} /* prevent option rows from cutting off */
+  }
 </style>
 </head>
 <body>
@@ -117,7 +132,7 @@
   <header>
     <div class="logo">✨</div>
     <div class="title">
-      <small>Cute Multi‑Step Wizard</small>
+      <small>Cute Multi-Step Wizard</small>
       <strong>Build Your Creative Profile Card</strong>
     </div>
   </header>
@@ -127,38 +142,10 @@
       <img src="https://images.unsplash.com/photo-1552632380-088d360edfe6?q=80&w=1600&auto=format&fit=crop" alt="Studio vibe">
       <div class="pad">
         <h1 id="title">Let’s make your profile.</h1>
-        <p class="muted">We’ll ask a few things and then render a clean profile card like your mockups.</p>
-        <div class="easy-wrap">
-          <!-- Red "easy" style button with THAT WASN'T SO HARD text (inline SVG, no external asset) -->
-          <img class="easy-img" alt="That Wasn't So Hard button" src="data:image/svg+xml;utf8,<?xml version='1.0' encoding='UTF-8'?>
-<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'>
-  <defs>
-    <radialGradient id='shine' cx='40%' cy='30%' r='70%'>
-      <stop offset='0%' stop-color='%23ffb3b3'/>
-      <stop offset='55%' stop-color='%23ff4545'/>
-      <stop offset='100%' stop-color='%23c81d25'/>
-    </radialGradient>
-    <linearGradient id='base' x1='0' y1='0' x2='0' y2='1'>
-      <stop offset='0%' stop-color='%23caced6'/>
-      <stop offset='100%' stop-color='%23848a99'/>
-    </linearGradient>
-  </defs>
-  <!-- Shadow -->
-  <ellipse cx='120' cy='180' rx='95' ry='20' fill='%23000000' opacity='.25'/>
-  <!-- Base ring -->
-  <ellipse cx='120' cy='160' rx='105' ry='36' fill='url(%23base)'/>
-  <!-- Red cap -->
-  <circle cx='120' cy='120' r='95' fill='url(%23shine)' stroke='%23a10e13' stroke-width='6'/>
-  <!-- Text -->
-  <g fill='white' font-family='Arial Black, Arial, sans-serif' text-anchor='middle'>
-    <text x='120' y='105' font-size='22'>THAT WASN&apos;T</text>
-    <text x='120' y='135' font-size='30'>SO HARD</text>
-  </g>
-</svg>">
-          <div class="controls">
-            <button class="btn-primary" id="start">Start</button>
-            <button class="btn-ghost" id="restart" style="display:none">Restart</button>
-          </div>
+        <p class="notice">Hey — thanks for beta-testing this system! Feel free to use your results and share on social for others to try it.</p>
+        <div class="controls">
+          <button class="btn-primary" id="start">Start</button>
+          <button class="btn-ghost" id="restart" style="display:none">Restart</button>
         </div>
         <div class="progress" aria-hidden="true"><div class="bar" id="bar"></div></div>
       </div>
@@ -183,7 +170,7 @@
             <div class="badge" id="roleBadge">Editor</div>
           </div>
           <div class="chip">
-            <div class="title">PROJECTS</div>
+            <div class="title">PROJECTS YOU WORK ON</div>
             <div class="badge" id="projBadge">Podcasts</div>
           </div>
           <div class="chip">
@@ -206,7 +193,7 @@
             <div class="badge" id="cityBadge">—</div>
           </div>
           <div class="chip">
-            <div class="title">DIFFICULTY (SELF‑RATED)</div>
+            <div class="title">DIFFICULTY (SELF-RATED)</div>
             <div class="badge" id="diffBadge">—/10</div>
           </div>
         </div>
@@ -214,13 +201,17 @@
         <div class="share">
           <button class="btn-primary" id="copy">Copy Summary</button>
           <button class="btn-ghost" id="print">Print / Save PDF</button>
+          <button class="btn-ghost" id="savePng">Save Card as PNG</button>
         </div>
       </div>
     </section>
   </div>
 
-  <p class="tiny" style="text-align:center;margin:16px 0">Single HTML file • Runs locally • MIT License</p>
+  <p class="tiny" style="text-align:center;margin:16px 0">Single HTML file • Runs on GitHub Pages • MIT License</p>
 </div>
+
+<!-- PNG export helper -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <script>
 // ===== Config (steps) =====
@@ -251,12 +242,19 @@ const quiz = [
       {value:"Creative Director", label:"Creative Director"},
       {value:"Producer", label:"Producer"},
       {value:"Director", label:"Director"},
-      {value:"Director of Photography", label:"Director of Photography (DP)"}
+      {value:"Director of Photography", label:"Director of Photography (DP)"},
+      // New roles
+      {value:"Stylist", label:"Stylist"},
+      {value:"Assistant Director", label:"Assistant Director"},
+      {value:"Gaffer", label:"Gaffer"},
+      {value:"P.A.", label:"P.A."},
+      {value:"Actor", label:"Actor"},
+      {value:"Model", label:"Model"}
     ]
   },
   {
     id: "gigs",
-    title: "Projects you want (pick all)",
+    title: "Projects you work on (pick all)",
     type: "multi",
     required: true,
     options: [
@@ -287,7 +285,6 @@ const quiz = [
     title: "Typical client budget?",
     type: "single",
     required: true,
-    // New bins as requested
     options: [
       {value:"$250", label:"$250"},
       {value:"$500", label:"$500"},
@@ -346,11 +343,11 @@ const startBtn = $("#start");
 const restartBtn = $("#restart");
 const resultEl = $("#result");
 
-let state = JSON.parse(sessionStorage.getItem("cute-state-v3")||"{}");
+let state = JSON.parse(sessionStorage.getItem("cute-state-v4")||"{}");
 let index = 0;
 
-function save(){ sessionStorage.setItem("cute-state-v3", JSON.stringify(state)); }
-function clear(){ sessionStorage.removeItem("cute-state-v3"); }
+function save(){ sessionStorage.setItem("cute-state-v4", JSON.stringify(state)); }
+function clear(){ sessionStorage.removeItem("cute-state-v4"); }
 
 function renderStep(step){
   const sec = document.createElement("section");
@@ -461,11 +458,12 @@ function go(i){
   restartBtn.style.display = "inline-block";
 }
 
+// Icons
 function emojiForAlign(v){
   if(!v) return smile();
-  if(v.startsWith("Freelancer")) return money();
-  if(v.startsWith("Creative")) return cameraRoll();
-  return smile();
+  if(v.startsWith("Freelancer")) return dollar();
+  if(v.startsWith("Creative")) return filmCamera();
+  return smile(); // Starting out
 }
 function themeForAlign(v){
   if(!v) return "#6ee7ff";
@@ -489,7 +487,7 @@ function finish(){
   // badges
   const roles = Array.isArray(state.roles) ? state.roles : [];
   const gigs = Array.isArray(state.gigs) ? state.gigs : [];
-  $("#roleBadge").textContent = roles.length ? roles.join(", ") : "—"; // show all roles
+  $("#roleBadge").textContent = roles.length ? roles.join(", ") : "—";
   $("#projBadge").textContent = gigs.length ? gigs.join(", ") : "—";
   $("#rateBadge").textContent = state.baseRate || "—";
   $("#budgetBadge").textContent = state.budget || "—";
@@ -513,16 +511,18 @@ function restart(){ state = {}; clear(); index = 0; renderAll(); go(0); }
 function start(){ startBtn.style.display="none"; restartBtn.style.display="inline-block"; renderAll(); go(0); }
 
 // Simple SVGs
-function smile(){ return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+function smile(){ return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-label="Smiley">
 <circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg>`; }
-function money(){ return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-<path d="M12 3c2 1 3 2 3 4s-1 3-3 4-3 2-3 4 1 3 3 4"/><path d="M12 17v4"/><path d="M12 3v4"/></svg>`; }
-function cameraRoll(){ return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-<rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3"/><circle cx="9.5" cy="12" r="2.5"/></svg>`; }
+function dollar(){ return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-label="Dollar">
+<path d="M12 2v20"/><path d="M17 7c0-2.2-2.2-3-5-3s-5 .8-5 3 2 3 5 3 5 .8 5 3-2.2 3-5 3-5-.8-5-3"/><!-- stylized S -->
+</svg>`; }
+function filmCamera(){ return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-label="Film camera">
+<circle cx="7.5" cy="6.5" r="3"/><circle cx="14.5" cy="6.5" r="3"/><rect x="4" y="10" width="12" height="8" rx="2"/><path d="M16 12l4-2v8l-4-2"/></svg>`; }
 
 // Events
 startBtn.addEventListener("click", start);
 restartBtn.addEventListener("click", restart);
+
 document.getElementById("copy").addEventListener("click", ()=>{
   const line = `${state.yourName || "—"} — ${taglineForAlign(state.align)} | City: ${state.city||"—"} | Roles: ${(state.roles||[]).join(", ")||"—"} | Projects: ${(state.gigs||[]).join(", ")||"—"} | Rate: ${state.baseRate||"—"} | Budget: ${state.budget||"—"} | Gear: ${(state.equipCats||[]).join(", ")||"—"} | ${state.ownCam||""} | ${state.insured||""} | Difficulty: ${state.difficulty||"—"}/10`;
   navigator.clipboard.writeText(line).then(()=>{
@@ -530,6 +530,19 @@ document.getElementById("copy").addEventListener("click", ()=>{
   });
 });
 document.getElementById("print").addEventListener("click", ()=>window.print());
+
+// Save PNG of the card
+document.getElementById("savePng").addEventListener("click", async ()=>{
+  const el = document.getElementById("profile");
+  const canvas = await html2canvas(el, {useCORS:true, backgroundColor:null, scale:2});
+  const url = canvas.toDataURL("image/png");
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${(state.yourName||"profile").replace(/\s+/g,"_")}_card.png`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+});
 
 // resume session
 if(Object.keys(state).length){ start(); }
